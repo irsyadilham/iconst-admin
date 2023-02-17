@@ -22,7 +22,9 @@ export default function Main({children, page}: args) {
       const profile: User = await get(`/users/${userId}`);
       setProfile(profile);
     } catch (err: any) {
-      alert('Failed to fetch profile, please refresh');
+      if (localStorage.getItem('user_id')) {
+        alert('Failed to fetch profile, please refresh');
+      }
     }
   }
 
