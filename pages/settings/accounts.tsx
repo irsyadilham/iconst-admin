@@ -18,7 +18,7 @@ export default function Accounts() {
   const getAdminAccounts = async () => {
     try {
       const accounts: User[] = await get('/users');
-      setAccounts(accounts.filter(acc => acc.email !== 'me@irsyadilham.com'));
+      setAccounts(accounts.filter(acc => acc.email !== 'irsyadmhdilham@gmail.com'));
     } catch (err: any) {
       console.log(err);
     }
