@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
+import { getNoToken } from '../functions/fetch';
+
 export default function Login() {
-  const login = (e: React.FormEvent) => {
+  
+  const router = useRouter();
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+
+  const login = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const login = await getNoToken(`/login?ec=${email.current?.value}&p=${password.current?.value}`);
+      if (login.master_admin) {
+        localStorage.setItem('master_admin', 'true');
+      }
+      localStorage.setItem('user_id', login.user_id.toString());
+      localStorage.setItem('token', login.token);
+      router.push('/jobs');
+    } catch (err: any) {
+      if (err.status === 404) {
+        alert('User not exists, please enter correct email or contact no');
+        return;
+      } else if (err.status === 401) {
+        alert('Incorrect password, please try again');
+        return;
+      }
+    }
   }
+
   return (
     <main className="flex items-center justify-center h-screen">
       <section className="w-[25%]">
@@ -15,11 +41,11 @@ export default function Login() {
         <form onSubmit={login} className="w-full mt-1 space-y-[1.5em]">
           <div>
             <label className="label">Email</label>
-            <input type="text" className="input" />
+            <input ref={email} type="email" className="input" />
           </div>
           <div>
             <label className="label">Password</label>
-            <input type="password" className="input" />
+            <input ref={password} type="password" className="input" />
           </div>
           <button className="button">Login</button>
         </form>

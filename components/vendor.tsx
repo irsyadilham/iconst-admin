@@ -1,8 +1,11 @@
 import Image from 'next/image';
-import { VendorList } from '../interfaces/vendor';
+import Link from 'next/link';
+import vendor from '../types/vendor';
+import states from '../public/states.json';
+import { stateKey } from '../types/vendor';
 
 interface args {
-  data: VendorList;
+  data: vendor;
 }
 
 export default function Vendor({data}: args) {
@@ -32,19 +35,21 @@ export default function Vendor({data}: args) {
       <section className="mt-[.6em] space-y-[.3em]">
         <div className="flex items-center">
           <Image className="w-[.8em]" src="/location.svg" alt="location" width={12} height={16}/>
-          <p className="ml-[.5em]">{data.address.district}, {data.address.state}</p>
+          <p className="ml-[.5em]">{data.address.district}, {states[data.address.state as stateKey]}</p>
         </div>
         <div className="flex items-center">
           <Image className="w-[.8em]" src="/service.svg" alt="service" width={18} height={16}/>
           <p className="ml-[.5em]">{data.services.map(val => val.name).join(', ')}</p>
         </div>
-        {/* <div className="flex items-center">
-          <Image className="w-[.8em]" src="/coin.svg" alt="coin" width={16} height={16}/>
-          <p className="ml-[.5em]">{data.coin}</p>
-        </div> */}
+        <div className="flex items-cente">
+          <p className="text-gray text-sm">Status :</p>
+          <h4 className={`ml-[.5em] text-sm ${data.airtime_status.active ? 'text-primary' : 'text-gray'}`}>{data.airtime_status.active ? 'Active' : 'Inactive'}</h4>
+        </div>
       </section>
       
-      <button className="text-sm py-[.5em] px-[.9em] text-white rounded-md bg-primary mt-[.8em]">View details</button>
+      <Link href={`/vendor/${data.id}`}>
+        <button className="text-sm py-[.5em] px-[.9em] text-white rounded-md bg-primary mt-[.8em]">View details</button>
+      </Link>
 
     </main>
   );

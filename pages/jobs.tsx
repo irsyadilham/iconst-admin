@@ -2,7 +2,7 @@ import Main from '../components/main';
 
 export default function Jobs() {
   return (
-    <Main>
+    <Main page="jobs">
       jobs
     </Main>
   );
