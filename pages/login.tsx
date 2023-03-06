@@ -1,16 +1,17 @@
-import React, { useRef } from 'react';
+import type { NextPage } from 'next';
+import { FormEvent, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 import { getNoToken } from '../functions/fetch';
 
-export default function Login() {
+const Login: NextPage = () => {
   
   const router = useRouter();
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
 
-  const login = async (e: React.FormEvent) => {
+  const login = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const login = await getNoToken(`/login?ec=${email.current?.value}&p=${password.current?.value}`);
@@ -53,3 +54,5 @@ export default function Login() {
     </main>
   );
 }
+
+export default Login;

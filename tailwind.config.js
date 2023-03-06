@@ -9,6 +9,9 @@ module.exports = {
       'sans': ['Inter']
     },
     extend: {
+      animation: {
+        'spin-fast': 'spin .7s linear infinite'
+      },
       colors: {
         'primary': '#7C52BF',
         'gray': '#878787',
@@ -53,7 +56,8 @@ module.exports = {
         '34': '34rem'
       },
       boxShadow: {
-        'normal': '1px 1px 4px rgba(0, 0, 0, 0.2)'
+        'normal': '1px 1px 4px rgba(0, 0, 0, 0.2)',
+        'toggle': '0 0 2px rgba(0, 0, 0, .3)'
       }
     },
   },

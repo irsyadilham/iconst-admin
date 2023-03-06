@@ -1,3 +1,4 @@
+import type { NextPage } from 'next';
 import React, { ReactNode } from 'react';
 import Back from '../components/back';
 import SettingSidebar from '../components/setting-sidebar';
@@ -7,11 +8,11 @@ type args = {
   page: string;
 }
 
-export default function SettingsContainer({children, page}: args) {
+const SettingsContainer: NextPage<args> = ({children, page}) => {
 
   return (
     <main className="flex items-center justify-center h-screen">
-      <section className="w-3/6">
+      <section className="w-8/12">
         <Back text="Back" route="/"/>
         
         <h2 className="text-2xl mt-2">Settings</h2>
@@ -32,3 +33,5 @@ export default function SettingsContainer({children, page}: args) {
     </main>
   );
 }
+
+export default SettingsContainer;

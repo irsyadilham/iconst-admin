@@ -1,5 +1,6 @@
+import type { NextPage } from 'next';
 import { forwardRef } from 'react';
-import User from '../types/user';
+import type { User } from '../types/user';
 
 type props = {
   user: User;
@@ -7,7 +8,7 @@ type props = {
   cancel(): void;
 };
 
-const ConfirmRemoveUser = forwardRef(({user, remove, cancel} : props, ref: any) => {
+const ConfirmRemoveUser = forwardRef<any, props>(({user, remove, cancel}, ref: any) => {
   return (
     <main ref={ref} className="fixed left-0 top-0 w-full h-screen hidden justify-center items-center bg-black/50 opacity-0">
 

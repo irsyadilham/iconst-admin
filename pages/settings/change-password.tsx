@@ -1,9 +1,11 @@
-import React, { useRef, FormEvent } from 'react';
+import type { NextPage } from 'next';
+import { useRef, FormEvent, useContext } from 'react';
+import AppContext from '../../context/app';
 import SettingsContainer from '../../components/settings-container';
 import { put } from '../../functions/fetch';
 
-export default function ChangePassword() {
-
+const ChangePassword: NextPage = () => {
+  const context = useContext(AppContext);
   const password = useRef<HTMLInputElement>(null);
   const newPassword = useRef<HTMLInputElement>(null);
   const confirmPassword = useRef<HTMLInputElement>(null);
@@ -19,11 +21,14 @@ export default function ChangePassword() {
         password: password.current?.value,
         newPassword: newPassword.current?.value
       };
+      context?.loading.dispatch({type: 'ON'});
       await put('/change-password', data);
+      context?.loading.dispatch({type: 'OFF'});
       password.current!.value = '';
       newPassword.current!.value = '';
       confirmPassword.current!.value = '';
     } catch (err: any) {
+      context?.loading.dispatch({type: 'OFF'});
       if (err.status === 400) {
         const data = await err.json();
         alert(data.message);
@@ -56,3 +61,5 @@ export default function ChangePassword() {
     </SettingsContainer>
   );
 }
+
+export default ChangePassword;

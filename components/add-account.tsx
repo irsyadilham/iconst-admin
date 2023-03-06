@@ -1,6 +1,7 @@
+import type { NextPage } from 'next';
 import { forwardRef, useRef, FormEvent } from 'react';
 import Image from 'next/image';
-import User from '../types/user';
+import type { User } from '../types/user';
 import { post } from '../functions/fetch';
 
 type props = {
@@ -8,7 +9,7 @@ type props = {
   addAccount(account: User): void;
 };
 
-const AddAccount = forwardRef(({close, addAccount}: props, ref: any) => {
+const AddAccount = forwardRef<any, props>(({close, addAccount}, ref: any) => {
 
   const name = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);

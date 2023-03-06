@@ -1,0 +1,1 @@
+export type StateKey = 'JHR' | 'KDH' | 'KTN' | 'KUL' | 'LBN' | 'MLK' | 'NSN' | 'PHG' | 'PJY' | 'PLS' | 'PNG' | 'PRK' | 'SBH' | 'SGR' | 'SRW' | 'TRG';

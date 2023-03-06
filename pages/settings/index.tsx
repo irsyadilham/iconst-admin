@@ -1,15 +1,18 @@
-import React, { useRef, useEffect } from 'react';
+import type { NextPage } from 'next';
+import { useRef, useEffect, FormEvent, useContext } from 'react';
+import AppContext from '../../context/app';
 import { put, get } from '../../functions/fetch';
-import User from '../../types/user';
+import type { User } from '../../types/user';
 
 import SettingsContainer from '../../components/settings-container';
 
-export default function Settings() {
+const Settings: NextPage = () => {
+  const context = useContext(AppContext);
   const name = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);
   const contactNo = useRef<HTMLInputElement>(null);
 
-  const update = async (e: React.FormEvent) => {
+  const update = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const data: User = {
@@ -17,19 +20,25 @@ export default function Settings() {
         email: email.current!.value,
         contact_no: contactNo.current!.value,
       };
+      context?.loading.dispatch({type: 'ON'});
       await put(`/users/${localStorage.getItem('user_id')}`, data);
+      context?.loading.dispatch({type: 'OFF'});
     } catch (err: any) {
+      context?.loading.dispatch({type: 'OFF'});
       alert('Failed to update, please try again later');
     }
   }
 
   const getProfile = async () => {
     try {
+      context?.loading.dispatch({type: 'ON'});
       const data: User = await get(`/users/${localStorage.getItem('user_id')}`);
+      context?.loading.dispatch({type: 'OFF'});
       name.current!.value = data.name;
       email.current!.value = data.email;
       contactNo.current!.value = data.contact_no;
     } catch (err: any) {
+      context?.loading.dispatch({type: 'OFF'});
       alert('Failed to get information, please try again later');
     }
   }
@@ -65,3 +74,5 @@ export default function Settings() {
     </SettingsContainer>
   );
 }
+
+export default Settings;

@@ -1,23 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import AppContext from '../../context/app';
 import { useRouter } from 'next/router';
 import Back from '../../components/back';
 import { get } from '../../functions/fetch';
-import vendor from '../../types/vendor';
+import type { Vendor as VendorType } from '../../types/vendor';
 import Vendor from '../../components/vendor';
 
 export default function VendorApplicants() {
+  const context = useContext(AppContext);
   const router = useRouter();
-  const [applicants, setApplicants] = useState<vendor[]>([]);
+  const [applicants, setApplicants] = useState<VendorType[]>([]);
 
   const getApplicants = async () => {
     try {
-      const vendors: vendor[] = await get('/vendors');
+      context?.loading.dispatch({type: 'ON'});
+      const vendors: VendorType[] = await get('/vendors');
+      context?.loading.dispatch({type: 'OFF'});
       if (vendors.filter(vendor => !vendor.approved).length === 0) {
         router.push('/vendors');
       }
       setApplicants(vendors.filter(vendor => !vendor.approved));
     } catch (err: any) {
-      
+      context?.loading.dispatch({type: 'OFF'});
     }
   }
 

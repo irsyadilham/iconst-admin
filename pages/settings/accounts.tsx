@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import AppContext from '../../context/app';
 import Image from 'next/image';
-import User from '../../types/user';
+import type { User } from '../../types/user';
 import { get, del } from '../../functions/fetch';
 import { gsap } from 'gsap';
 
@@ -9,7 +10,7 @@ import ConfirmRemoveUser from '../../components/confirm-remove-user';
 import AddAccount from '../../components/add-account';
 
 export default function Accounts() {
-
+  const context = useContext(AppContext);
   const [accounts, setAccounts] = useState<User[]>([]);
   const addAccountModal = useRef<HTMLDivElement>(null);
   const deleteModal = useRef<HTMLDivElement>(null);
@@ -17,9 +18,13 @@ export default function Accounts() {
 
   const getAdminAccounts = async () => {
     try {
+      context?.loading.dispatch({type: 'ON'});
+      context?.loading.dispatch({type: 'OFF'});
       const accounts: User[] = await get('/users');
+      context?.loading.dispatch({type: 'OFF'});
       setAccounts(accounts.filter(acc => acc.email !== 'irsyadmhdilham@gmail.com'));
     } catch (err: any) {
+      context?.loading.dispatch({type: 'OFF'});
       console.log(err);
     }
   }
@@ -61,13 +66,16 @@ export default function Accounts() {
 
   const confirmDeleteUser = async () => {
     try {
+      context?.loading.dispatch({type: 'ON'});
       await del(`/users/${accToDel.id}`);
+      context?.loading.dispatch({type: 'OFF'});
       const x = accounts.map(val => val.id).indexOf(accToDel.id);
       const arr = [...accounts];
       arr.splice(x, 1);
       setAccounts(arr);
       cancelDelete();
     } catch (err: any) {
+      context?.loading.dispatch({type: 'OFF'});
       console.error(err);
     }
   }

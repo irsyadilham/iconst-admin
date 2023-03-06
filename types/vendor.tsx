@@ -1,13 +1,7 @@
-import User from './user';
-
-export type Address = {
-  line_1: string;
-  line_2?: string;
-  postcode: number;
-  city: string;
-  district: string;
-  state: string;
-}
+import type { User } from './user';
+import type { Address } from './address';
+import type { Service } from './service';
+import type { JobVendor } from './job';
 
 export type CompanyDetails = {
   name: string;
@@ -20,19 +14,12 @@ export type PersonalDetails = {
   contactNo: number;
 }
 
-export type Service = {
-  id: number;
-  name: string;
-}
-
 export type AirtimeStatus = {
   active: boolean;
   expired_date: string;
 }
 
-export type stateKey = 'JHR' | 'KDH' | 'KTN' | 'KUL' | 'LBN' | 'MLK' | 'NSN' | 'PHG' | 'PJY' | 'PLS' | 'PNG' | 'PRK' | 'SBH' | 'SGR' | 'SRW' | 'TRG';
-
-type Vendor = {
+export type Vendor = {
   id: number;
   company_name: string;
   address: Address;
@@ -44,6 +31,5 @@ type Vendor = {
   airtime_status: AirtimeStatus;
   approved: boolean;
   user: User;
+  jobs: JobVendor[];
 }
-
-export default Vendor;

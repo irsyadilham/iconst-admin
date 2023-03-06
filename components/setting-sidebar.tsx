@@ -1,13 +1,16 @@
+import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Profile from '../public/settings/profile';
 import Padlock from '../public/settings/padlock';
+import Accounts from '../public/settings/accounts';
+import Air from '../public/settings/air';
 
 interface args {
   page: string;
 }
 
-export default function SettingSidebar({page}: args) {
+const SettingSidebar: NextPage<args> = ({page}) => {
 
   const [isMasterAdmin, setIsMasterAdmin] = useState<boolean>(false);
 
@@ -30,13 +33,21 @@ export default function SettingSidebar({page}: args) {
       {(() => {
         if (isMasterAdmin) {
           return (
-            <Link className="flex items-center" href="/settings/accounts">
-              <Padlock className={`${page === 'accounts' ? 'fill-primary' : 'fill-gray'}`}/>
-              <p className={`ml-[.7em] ${page === 'accounts' ? 'text-primary font-semibold' : 'text-gray'}`}>Accounts</p>
-            </Link>
+            <>
+              <Link className="flex items-center" href="/settings/accounts">
+                <Accounts className={`${page === 'accounts' ? 'stroke-primary' : 'stroke-gray'} w-[1.4em]`}/>
+                <p className={`ml-[.7em] ${page === 'accounts' ? 'text-primary font-semibold' : 'text-gray'}`}>Accounts</p>
+              </Link>
+              <Link className="flex items-center" href="/settings/airtimes">
+                <Air className={`${page === 'airtimes' ? 'fill-primary' : 'fill-gray'} w-1`}/>
+                <p className={`ml-[.7em] ${page === 'airtimes' ? 'text-primary font-semibold' : 'text-gray'}`}>Airtimes</p>
+              </Link>
+            </>
           );
         }
       })()}
     </section>
   );
 }
+
+export default SettingSidebar;

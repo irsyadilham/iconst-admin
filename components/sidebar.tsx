@@ -1,23 +1,26 @@
-import React from 'react';
+import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { get } from '../functions/fetch';
-import User from '../types/user';
+import type { User } from '../types/user';
 
 import Clipboard from '../public/sidebar/clipboard';
 import Settings from '../public/sidebar/settings';
 import Client from '../public/sidebar/client';
 import Vendor from '../public/sidebar/vendor';
+import Notification from '../public/sidebar/notification';
 
 type args = {
   page: string;
   profile: User;
 }
 
-export default function Sidebar({page, profile}: args) {
+const Sidebar: NextPage<args> = ({page, profile}) => {
 
   const router = useRouter();
+  const [unredNotifications, setUnreadNotifications] = useState<boolean>(false);
 
   const logout = async () => {
     try {
@@ -28,6 +31,19 @@ export default function Sidebar({page, profile}: args) {
       alert('failed to logout, please try again later');
     }
   }
+
+  const getTotalNotifications = async () => {
+    try {
+      const unread: number = await get('/total-admin-notifications');
+      setUnreadNotifications(unread === 1 ? true : false);
+    } catch (err: any) {
+      
+    }
+  }
+
+  useEffect(() => {
+    getTotalNotifications();
+  }, []);
 
   return (
     <main className="w-[14%] border-r-[.5px] border-gray flex flex-col justify-between">
@@ -47,6 +63,17 @@ export default function Sidebar({page, profile}: args) {
             <Client className={`w-[1.2em] h-[1.2em] ${page === 'clients' ? 'fill-primary' : 'fill-gray'}`}/>
             <p className={`ml-[.7em] ${page === 'clients' ? 'text-primary font-semibold' : 'text-gray'}`}>Clients</p>
           </Link>
+          <Link href="/notifications" className="flex items-center">
+            <div className="flex items-center">
+              <Notification className={`w-[1.2em] h-[1.2em] ${page === 'notifications' ? 'stroke-primary' : 'stroke-gray'}`}/>
+              <p className={`ml-[.7em] ${page === 'notifications' ? 'text-primary font-semibold' : 'text-gray'}`}>Notifications</p>
+            </div>
+            {(() => {
+              if (unredNotifications) {
+                return <div className="ml-[.5em] w-[.45em] h-[.45em] bg-primary rounded-full"/>
+              }
+            })()}
+          </Link>
           <Link href="/settings" className="flex items-center">
             <Settings className="w-[1.2em] h-[1.2em]"/>
             <p className={`ml-[.7em] ${page === 'settings' ? 'text-primary font-semibold' : 'text-gray'}`}>Settings</p>
@@ -62,3 +89,5 @@ export default function Sidebar({page, profile}: args) {
     </main>
   );
 }
+
+export default Sidebar;
