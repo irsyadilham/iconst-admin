@@ -12,7 +12,7 @@ import { jobStatus } from '../../functions/job-status';
 import type { Address } from '../../types/address';
 import type { Client } from '../../types/client';
 import type { Service } from '../../types/service';
-import type { Job, JobVendor as Quotation } from '../../types/job';
+import type { Job, JobVendor as Quotation, SupportingDocument } from '../../types/job';
 
 const JobDetails: NextPage = () => {
   const context = useContext(AppContext);
@@ -32,6 +32,7 @@ const JobDetails: NextPage = () => {
   const [jobObj, setJobObj] = useState<Job | null>(null);
   const [quotations, setQuotations] = useState<Quotation[]>([]);
   const [client, setClient] = useState<Client>();
+  const [supportingDocuments, setSupportingDocuments] = useState<SupportingDocument[]>([]);
 
   const getJobs = async () => {
     try {
@@ -47,6 +48,7 @@ const JobDetails: NextPage = () => {
       setService(job.service);
       setQuotations(job.vendors);
       setClient(job.client);
+      setSupportingDocuments(job.supporting_documents);
     } catch (err: any) {
       context?.loading.dispatch({type: 'OFF'});
       alert('Failed to retrieve vendor, please try again later');
@@ -134,6 +136,12 @@ const JobDetails: NextPage = () => {
           <Link href={`/clients/${client?.id}`}>
             <h4 className="text-primary underline cursor-pointer mt-[.3em]">{client?.user.name}</h4>
           </Link>
+
+          {(() => {
+            if (supportingDocuments.length > 0) {
+              return <a className="mt-1 text-primary font-semibold text-sm underline block" target="_blank" href={`${process.env.HOST}/${supportingDocuments[0].file_url}`}>View supporting document</a>
+            }
+          })()}
 
         </section>
         

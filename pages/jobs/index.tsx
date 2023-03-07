@@ -20,7 +20,9 @@ const Jobs: NextPage = () => {
       setJobs(jobs);
     } catch (err: any) {
       context?.loading.dispatch({type: 'OFF'});
-      alert('Failed to retrieve job, please try again later');
+      if (err.status !== 401) {
+        alert('Failed to retrieve job, please try again later');
+      }
     }
   }
 
@@ -88,7 +90,7 @@ const Jobs: NextPage = () => {
             <div className="bg-white p-[1.3em] shadow-normal rounded-lg flex flex-col justify-between" key={i}>
               <section id="top">
 
-                <div className="flex justify-between">
+                <div className="flex justify-between items-start">
                   <h3 className="text-primary">{job.title}</h3>
                   <p style={{backgroundColor: jobStatus(job).color}} className="status">{jobStatus(job).text}</p>
                 </div>

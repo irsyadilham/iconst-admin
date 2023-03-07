@@ -8,6 +8,10 @@ type Status = {
   name: string;
 }
 
+export type SupportingDocument = {
+  file_url: string;
+}
+
 export type Job = {
   id: number;
   date: string;
@@ -21,6 +25,7 @@ export type Job = {
   status: Status;
   vendors: JobVendor[];
   location: Address;
+  supporting_documents: SupportingDocument[];
 }
 
 export type JobVendor = {
