@@ -46,8 +46,10 @@ const Notifications: NextPage = () => {
     const notificationType = notification.notification_type.name;
     if (notificationType === 'quotation submitted') {
       push(`/jobs/${notification.job.id}`);
-    } else if (notificationType === 'new vendor application') {
+    } else if (notificationType === 'new vendor registration') {
       push(`/vendors/applicants`);
+    } else if (notificationType === 'new job request') {
+      push(`/jobs/${notification.job.id}`);
     }
   }
 
@@ -85,8 +87,10 @@ const Notifications: NextPage = () => {
                 const notificationType = val.notification_type.name;
                 if (notificationType === 'quotation submitted') {
                   return <p className="mt-[.3em] text-black">New quotation submitted for job <span className="text-primary font-semibold">{val.job.title}</span></p>
-                } else if (notificationType === 'new vendor application') {
-                  return <p className="mt-[.3em] text-black">New vendor application</p>
+                } else if (notificationType === 'new vendor registration') {
+                  return <p className="mt-[.3em] text-black">New vendor registration</p>
+                } else if (notificationType === 'new job request') {
+                  return <p className="mt-[.3em] text-black">New Job posted <span className="text-primary font-semibold">{val.job.title}</span></p>
                 }
               })()}
             </div>
